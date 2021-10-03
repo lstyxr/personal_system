@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-wtf = "*"
+flask-sqlalchemy = "*"
+mysqlclient = "*"
+requests = "*"
+flask-migrate = "*"
+flask-whooshee = "*"
+flask-login = "*"
+flask-debugtoolbar = {version = "*", index = "https://mirrors.aliyun.com/pypi/simple/"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
