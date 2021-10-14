@@ -36,10 +36,12 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">todolist:</h6>                
+                <h6 class="collapse-header">todolist:</h6>
+                <!-- 注意这里 url_for 绑定的是函数名，不是路由名 -->
                 <a class="collapse-item" href="{{url_for('todo_add', is_done=0)}}">新增任务</a>
                 <a class="collapse-item" href="{{url_for('todo_list', is_done=0)}}">任务列表</a>
                 <a class="collapse-item" href="{{url_for('todo_list', is_done=1)}}">已完成</a>
+                <a class="collapse-item" href="{{url_for('todo_list_test')}}">大小计划</a>
             </div>
         </div>
     </li>

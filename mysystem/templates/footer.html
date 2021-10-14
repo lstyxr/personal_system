@@ -39,6 +39,7 @@
     </div>
 </div>
 <!-- Bootstrap core JavaScript-->
+<!-- 因为是要用到局部请求，需要用JavaScript来实现，Jquery是JavaScript更轻量的框架，用她来更方便的操作 -->
 <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
 
 <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -57,4 +58,5 @@
 <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
 
 <!-- 监听用户点击 -->
+<!-- 专门写请求，提前导入 -->
 <script src="{{url_for('static', filename='js/todo.js')}}"></script>
