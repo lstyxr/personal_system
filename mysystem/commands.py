@@ -1,7 +1,7 @@
 import click
 from click.termui import prompt
 from mysystem import app, db
-from mysystem.models01 import User
+from mysystem.models import User
 
 # 注册命令
 @app.cli.command()

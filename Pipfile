@@ -13,6 +13,7 @@ flask-migrate = "*"
 flask-whooshee = "*"
 flask-login = "*"
 flask-debugtoolbar = {version = "*", index = "https://mirrors.aliyun.com/pypi/simple/"}
+python-dotenv = {version = "*", index = "https://mirrors.aliyun.com/pypi/simple"}
 
 [dev-packages]
 

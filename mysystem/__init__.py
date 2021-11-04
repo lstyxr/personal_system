@@ -5,8 +5,8 @@ from flask_whooshee import Whooshee
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension, toolbar
 
-app = Flask('personal_system')
-app.secret_key = 'personal_system'
+app = Flask('mysystem')
+app.secret_key = 'mysystem'
 app.debug = True
 toolbar = DebugToolbarExtension(app)
 
@@ -29,3 +29,5 @@ migrate.init_app(app, db=db)
 # 初始化登录
 login_manager = LoginManager(app)
 login_manager.init_app(app)
+
+from mysystem import views, commands, models

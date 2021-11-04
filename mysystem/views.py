@@ -6,9 +6,9 @@ from werkzeug.utils import redirect
 
 # 模型 models 要改成需要的，db.create_all()才能自动创建其中的表
 # 本工程是用 commands.py 模块中用户注册函数包含的 db.create_all() 功能，所有 commands.py 模块中的 import 也要改一下
-from mysystem.models01 import User
-from mysystem.models01 import Plan
-from mysystem.models01 import SubPlan
+from mysystem.models import User
+from mysystem.models import Plan
+from mysystem.models import SubPlan
 import sys
 from flask import render_template, session, request
 from mysystem import app  # 这个下划线错误提示不用管
@@ -84,18 +84,44 @@ def logout():
 @app.route('/todolist/<int:is_done>/', methods=['GET', 'POST'])
 @login_required
 def todo_list(is_done):
-    # user = User.query.filter_by(id=session['user_id']).first_or_404()
-    # user = current_user
-    # page_num = 6
-    # page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(id=session['user_id']).first_or_404()
+    user = current_user
+    page_num = 6
+    page = request.args.get('page', 1, type=int)
     # pagination = SubPlan.query.with_parent(user).paginate(page, per_page=page_num)
-    # todos = Todo.query.with_parent(user).filter_by(is_done=is_done)
+    plan = Plan.query.with_parent(user)
+    subplans = SubPlan.query.with_parent(plan)
     # todos = pagination.items
-    todos = SubPlan.query
+    # todos = SubPlan.query
 
-    # todo_form = TodoForm()
+    todo_form = TodoForm()
     # sub_todo = SubTodoForm()
-    return render_template('todolist02.html', todolist=todos, is_done=is_done)
+    return render_template('views_collapse.html', sub_plans=subplans, is_done=is_done, todo=plan, form=todo_form)
+
+@app.route('/todo/add/<int:plan_id>', methods=['POST'])
+@login_required
+def add_todo(plan_id):
+    body = request.form.get('todo')
+    user_id = current_user.get_id()
+    sub_plan = SubPlan(body=body, user_id=user_id, plan_id=plan_id)
+    db.session.add(sub_plan)
+    db.session.commit()
+    todo_id = sub_plan.plan_id
+    return f"""
+                <div class="card-body border border-light">
+                    <p class="card-text d-inline">{body}</p>
+                    <input type="checkbox" data-todo-id="{todo_id}" value="{plan_id}" class="btn-check d-inline float-right"
+                                                                                autocomplete="off">
+                </div>
+        
+    """
+
+@app.route('/collapsetest', methods=['GET'])
+def todo_list_test():
+    todo = Plan.query
+    subplans = SubPlan.query
+    todo_form = TodoForm()  # 实例窗体
+    return render_template('todolist_collapse02.html', sub_plans=subplans, todos=todo, form=todo_form)
 
 # 新增任务路由
 @app.route('/todoadd', methods=['GET', 'POST'])
@@ -105,15 +131,15 @@ def todo_add():
     return render_template('addplan.html', form=todo_form, forms=todo_form)
 
 # 在前端窗体中绑定这个路由<form action="/todolist/add" method="POST"> ... </form>
-@app.route('/todolist/add', methods=['POST'])
-def add_todo():
-    todo_form = TodoForm()  # 实例窗体    
-    plan = Plan(body=todo_form.body.data, user_id=session['user_id'])  # 进而获得用户窗体中输入的数据存入数据库
-    db.session.add(plan)
-    db.session.commit()
-    global plan_add
-    plan_add = Plan.query.filter_by(body=todo_form.body.data).first_or_404()
-    return todo_add()
+# @app.route('/todolist/add', methods=['POST'])
+# def add_todo():
+#     todo_form = TodoForm()  # 实例窗体    
+#     plan = Plan(body=todo_form.body.data, user_id=session['user_id'])  # 进而获得用户窗体中输入的数据存入数据库
+#     db.session.add(plan)
+#     db.session.commit()
+#     global plan_add
+#     plan_add = Plan.query.filter_by(body=todo_form.body.data).first_or_404()
+#     return todo_add()
 
 # 创建子计划
 @app.route('/todolist/adds', methods=['POST'])
